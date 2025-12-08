@@ -37,25 +37,32 @@ cat("Missing values in drinks:", sum(is.na(drinks)), "\n")
 cat("Missing values in life expectancy:", sum(is.na(life_exp)), "\n\n")
 
 # ============================================================================
-# 2. DATA MERGING
+# 2. DATA MERGING (FILTERING FOR YEAR 2013 AND MALE ONLY)
 # ============================================================================
 
-cat("=== MERGING DATASETS ===\n\n")
+cat("=== FILTERING LIFE EXPECTANCY FOR YEAR 2013 AND MALE ===\n\n")
 
-# Merge the two datasets by country
-# IMPORTANT: Adjust column names based on your actual data
-# Common variations in drinks.csv: "country" or "Country"
-# Common variations in life expectancy: "Country", "country", "country_name"
+base_year <- 2013
+sex_filter <- "Male"  # Filter for males
+ghofilter <- "Life expectancy at birth (years)"
 
-# Check column names to determine merge keys
-cat("Drinks column names:", colnames(drinks), "\n")
-cat("Life expectancy column names:", colnames(life_exp), "\n\n")
+# Check the column names for sex and year
+cat("Life expectancy columns:", colnames(life_exp), "\n\n")
 
-# Merge - adjust the by.x and by.y parameters to match your actual column names
-# Example assuming drinks has "country" and life_exp has "CountryDisplay"
-data_merged <- merge(drinks, life_exp, by.x = "country", by.y = "CountryDisplay", all = FALSE)
+# Filter life expectancy dataset for year 2013 and male
+life_exp_year <- life_exp %>%
+  filter(YearDisplay == base_year, SexDisplay == sex_filter, GhoDisplay == ghofilter)
 
+cat("Filtered life expectancy dataset for year:", base_year, "and sex:", sex_filter, "\n")
+cat("Number of countries:", nrow(life_exp_year), "\n\n")
+
+# Merge drinks dataset with filtered life expectancy dataset
+data_merged <- merge(drinks, life_exp_year, by.x = "country", by.y = "CountryDisplay", all = FALSE)
 cat("Number of countries after merge:", nrow(data_merged), "\n\n")
+
+# Display column names after merge
+cat("Merged dataset columns:", colnames(data_merged), "\n\n")
+
 
 # ============================================================================
 # 3. DATA CLEANING AND SELECTION
@@ -121,59 +128,41 @@ cat("Max:    ", round(max_life_exp, 2), "\n\n")
 # 5. VISUALIZATIONS 
 # ============================================================================
 
-cat("=== CREATING UPDATED VISUALIZATIONS ===\n\n")
-
-
-# --------------------------------------------------
-# Visualization 1: Scatter Plot with regression line
-# --------------------------------------------------
-
+cat("=== CREATING VISUALIZATIONS FOR MERGED DATA ONLY ===\n\n")
 
 # Scatter plot with regression line
 scatter_plot <- ggplot(data_clean, aes(x = Alcohol_Consumption, y = Life_Expectancy)) +
   geom_point(alpha = 0.6, size = 3, color = "darkblue") +
   geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) +
-  labs(title = "Relationship between Alcohol Consumption and Life Expectancy",
+  labs(title = "Alcohol Consumption vs Life Expectancy (Merged Dataset)",
        x = "Alcohol Consumption per Capita (litres)",
        y = "Life Expectancy at Birth (years)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-# Display plot
 print(scatter_plot)
 
-
-
-# --------------------------------------------------
-# Visualization 2: Histogram of Alcohol Consumption
-# --------------------------------------------------
-
+# Histogram of Alcohol Consumption
 hist(data_clean$Alcohol_Consumption,
-     main = "Distribution of Alcohol Consumption per Capita",
+     main = "Distribution of Alcohol Consumption (Merged Dataset)",
      xlab = "Alcohol Consumption (litres per capita)",
      ylab = "Frequency",
      col = "steelblue",
      border = "white",
      breaks = 15)
 
-cat("Displayed: Histogram of Alcohol Consumption\n")
+cat("Displayed: Histogram of Alcohol Consumption (Merged Data)\n")
 
-# --------------------------------------------------
-# Visualization 3: Histogram of Life Expectancy
-# --------------------------------------------------
-
+# Histogram of Life Expectancy
 hist(data_clean$Life_Expectancy,
-     main = "Distribution of Life Expectancy",
+     main = "Distribution of Life Expectancy (Merged Dataset)",
      xlab = "Life Expectancy (years)",
      ylab = "Frequency",
      col = "coral",
      border = "white",
      breaks = 15)
 
-cat("Displayed: Histogram of Life Expectancy\n")
-
-
-
+cat("Displayed: Histogram of Life Expectancy (Merged Data)\n")
 
 
 # Pearson correlation test
@@ -203,5 +192,6 @@ if (p_value < 0.05) {
   cat("\nConclusion: The null hypothesis is NOT REJECTED (p >= 0.05)\n")
   cat("There is no statistically significant correlation between alcohol consumption and life expectancy.\n")
 }
+
 
 
