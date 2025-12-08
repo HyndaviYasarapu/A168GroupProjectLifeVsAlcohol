@@ -121,7 +121,7 @@ cat("Max:    ", round(max_life_exp, 2), "\n\n")
 # 5. VISUALIZATIONS (VIEW IN RSTUDIO)
 # ============================================================================
 
-cat("=== CREATING VISUALIZATIONS ===\n\n")
+cat("=== CREATING UPDATED VISUALIZATIONS ===\n\n")
 
 # --------------------------------------------------
 # Visualization 1: Histogram of Alcohol Consumption
@@ -163,19 +163,16 @@ plot(data_clean$Alcohol_Consumption,
      xlab = "Alcohol Consumption per Capita (litres of pure alcohol)",
      ylab = "Life Expectancy at Birth (years)",
      pch = 19,
-     col = rgb(0, 0, 0.5, 0.6),  # Dark blue with transparency
+     col = rgb(0, 0, 0.5, 0.6),
      cex = 1.2,
      las = 1)
 
-# Add regression line
 abline(lm(Life_Expectancy ~ Alcohol_Consumption, data = data_clean), 
        col = "red", 
        lwd = 2)
 
-# Add grid for better readability
 grid(col = "gray", lty = "dotted")
 
-# Add subtitle with sample size
 mtext(paste("n =", nrow(data_clean), "countries"), 
       side = 3, 
       line = 0.5, 
@@ -184,35 +181,27 @@ mtext(paste("n =", nrow(data_clean), "countries"),
 cat("Displayed: Scatter Plot with Regression Line\n")
 
 # --------------------------------------------------
-# Visualization 4: Q-Q Plot for Alcohol Consumption
+# Visualization 4: Stripchart Alcohol
 # --------------------------------------------------
 
-qqnorm(data_clean$Alcohol_Consumption,
-       main = "Q-Q Plot: Alcohol Consumption",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles",
-       pch = 19,
-       col = "steelblue")
+stripchart(data_clean$Alcohol_Consumption,
+           method = "jitter",
+           main = "Stripchart: Alcohol Consumption",
+           xlab = "Alcohol Consumption (litres per capita)",
+           pch = 19,
+           col = "steelblue")
 
-qqline(data_clean$Alcohol_Consumption, 
-       col = "red", 
-       lwd = 2)
-
-cat("Displayed: Q-Q Plot for Alcohol Consumption\n")
+cat("Displayed: Stripchart for Alcohol Consumption\n")
 
 # --------------------------------------------------
-# Visualization 5: Q-Q Plot for Life Expectancy
+# Visualization 5: Stripchart Life Expectancy
 # --------------------------------------------------
 
-qqnorm(data_clean$Life_Expectancy,
-       main = "Q-Q Plot: Life Expectancy",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles",
-       pch = 19,
-       col = "coral")
+stripchart(data_clean$Life_Expectancy,
+           method = "jitter",
+           main = "Stripchart: Life Expectancy",
+           xlab = "Life Expectancy (years)",
+           pch = 19,
+           col = "coral")
 
-qqline(data_clean$Life_Expectancy, 
-       col = "red", 
-       lwd = 2)
-
-cat("Displayed: Q-Q Plot for Life Expectancy\n\n")
+cat("Displayed: Stripchart for Life Expectancy\n\n")
