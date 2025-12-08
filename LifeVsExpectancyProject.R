@@ -204,3 +204,49 @@ barplot(life_counts,
         las = 2)
 
 cat("Displayed: Barplot for Life Expectancy\n\n")
+
+# Scatter plot with regression line
+scatter_plot <- ggplot(data_clean, aes(x = Alcohol_Consumption, y = Life_Expectancy)) +
+  geom_point(alpha = 0.6, size = 3, color = "darkblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) +
+  labs(title = "Relationship between Alcohol Consumption and Life Expectancy",
+       x = "Alcohol Consumption per Capita (litres)",
+       y = "Life Expectancy at Birth (years)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Display plot
+print(scatter_plot)
+
+
+
+
+# Pearson correlation test
+correlation_test <- cor.test(data_clean$Alcohol_Consumption, 
+                             data_clean$Life_Expectancy,
+                             method = "pearson")
+
+# Display correlation results
+print(correlation_test)
+
+# Extract key statistics
+correlation_coefficient <- correlation_test$estimate
+p_value <- correlation_test$p.value
+confidence_interval <- correlation_test$conf.int
+
+cat("\n=== CORRELATION ANALYSIS RESULTS ===\n")
+cat("Pearson Correlation Coefficient (r):", correlation_coefficient, "\n")
+cat("P-value:", p_value, "\n")
+cat("95% Confidence Interval:", confidence_interval[1], "to", confidence_interval[2], "\n")
+cat("Sample size (n):", nrow(data_clean), "\n")
+
+# Interpretation
+if (p_value < 0.05) {
+  cat("\nConclusion: The null hypothesis is REJECTED (p < 0.05)\n")
+  cat("There is a statistically significant correlation between alcohol consumption and life expectancy.\n")
+} else {
+  cat("\nConclusion: The null hypothesis is NOT REJECTED (p >= 0.05)\n")
+  cat("There is no statistically significant correlation between alcohol consumption and life expectancy.\n")
+}
+
+
