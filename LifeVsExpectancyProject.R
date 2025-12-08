@@ -118,7 +118,7 @@ cat("Min:    ", round(min_life_exp, 2), "\n")
 cat("Max:    ", round(max_life_exp, 2), "\n\n")
 
 # ============================================================================
-# 5. VISUALIZATIONS (VIEW IN RSTUDIO)
+# 5. VISUALIZATIONS 
 # ============================================================================
 
 cat("=== CREATING UPDATED VISUALIZATIONS ===\n\n")
@@ -129,12 +129,11 @@ cat("=== CREATING UPDATED VISUALIZATIONS ===\n\n")
 
 hist(data_clean$Alcohol_Consumption,
      main = "Distribution of Alcohol Consumption per Capita",
-     xlab = "Alcohol Consumption (litres of pure alcohol per capita)",
-     ylab = "Frequency (Number of Countries)",
+     xlab = "Alcohol Consumption (litres per capita)",
+     ylab = "Frequency",
      col = "steelblue",
      border = "white",
-     breaks = 15,
-     las = 1)
+     breaks = 15)
 
 cat("Displayed: Histogram of Alcohol Consumption\n")
 
@@ -143,45 +142,39 @@ cat("Displayed: Histogram of Alcohol Consumption\n")
 # --------------------------------------------------
 
 hist(data_clean$Life_Expectancy,
-     main = "Distribution of Life Expectancy at Birth",
+     main = "Distribution of Life Expectancy",
      xlab = "Life Expectancy (years)",
-     ylab = "Frequency (Number of Countries)",
+     ylab = "Frequency",
      col = "coral",
      border = "white",
-     breaks = 15,
-     las = 1)
+     breaks = 15)
 
 cat("Displayed: Histogram of Life Expectancy\n")
 
 # --------------------------------------------------
-# Visualization 3: Main Scatter Plot with Regression Line
+# Visualization 3: Scatter Plot WITHOUT Regression Line
 # --------------------------------------------------
 
 plot(data_clean$Alcohol_Consumption, 
      data_clean$Life_Expectancy,
-     main = "Relationship between Alcohol Consumption and Life Expectancy",
-     xlab = "Alcohol Consumption per Capita (litres of pure alcohol)",
-     ylab = "Life Expectancy at Birth (years)",
+     main = "Alcohol Consumption vs Life Expectancy",
+     xlab = "Alcohol Consumption (litres per capita)",
+     ylab = "Life Expectancy (years)",
      pch = 19,
      col = rgb(0, 0, 0.5, 0.6),
-     cex = 1.2,
-     las = 1)
-
-abline(lm(Life_Expectancy ~ Alcohol_Consumption, data = data_clean), 
-       col = "red", 
-       lwd = 2)
+     cex = 1.1)
 
 grid(col = "gray", lty = "dotted")
 
 mtext(paste("n =", nrow(data_clean), "countries"), 
       side = 3, 
-      line = 0.5, 
+      line = 0.3,
       cex = 0.9)
 
-cat("Displayed: Scatter Plot with Regression Line\n")
+cat("Displayed: Scatter Plot\n")
 
 # --------------------------------------------------
-# Visualization 4: Stripchart Alcohol
+# Visualization 4: StripChart (Alcohol)
 # --------------------------------------------------
 
 stripchart(data_clean$Alcohol_Consumption,
@@ -194,14 +187,20 @@ stripchart(data_clean$Alcohol_Consumption,
 cat("Displayed: Stripchart for Alcohol Consumption\n")
 
 # --------------------------------------------------
-# Visualization 5: Stripchart Life Expectancy
+# Visualization 5: Barplot (Life Expectancy)
 # --------------------------------------------------
 
-stripchart(data_clean$Life_Expectancy,
-           method = "jitter",
-           main = "Stripchart: Life Expectancy",
-           xlab = "Life Expectancy (years)",
-           pch = 19,
-           col = "coral")
+life_bins <- cut(data_clean$Life_Expectancy,
+                 breaks = 10,
+                 include.lowest = TRUE)
 
-cat("Displayed: Stripchart for Life Expectancy\n\n")
+life_counts <- table(life_bins)
+
+barplot(life_counts,
+        main = "Barplot of Life Expectancy Bins",
+        xlab = "Life Expectancy Range (years)",
+        ylab = "Count",
+        col = "coral",
+        las = 2)
+
+cat("Displayed: Barplot for Life Expectancy\n\n")
