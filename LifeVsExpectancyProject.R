@@ -152,7 +152,7 @@ hist(data_clean$Life_Expectancy,
 cat("Displayed: Histogram of Life Expectancy\n")
 
 # --------------------------------------------------
-# Visualization 3: Scatter Plot WITHOUT Regression Line
+# Visualization 3: Scatter Plot 
 # --------------------------------------------------
 
 plot(data_clean$Alcohol_Consumption, 
