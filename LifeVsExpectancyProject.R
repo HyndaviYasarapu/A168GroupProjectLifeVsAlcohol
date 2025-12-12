@@ -103,7 +103,7 @@ median_alcohol <- median(data_clean$Alcohol_Consumption)
 min_alcohol <- min(data_clean$Alcohol_Consumption)
 max_alcohol <- max(data_clean$Alcohol_Consumption)
 
-cat("--- ALCOHOL CONSUMPTION (litres per capita) ---\n")
+cat("--- ALCOHOL CONSUMPTION \n")
 cat("Mean:   ", round(mean_alcohol, 2), "\n")
 cat("SD:     ", round(sd_alcohol, 2), "\n")
 cat("Median: ", round(median_alcohol, 2), "\n")
@@ -117,7 +117,7 @@ median_life_exp <- median(data_clean$Life_Expectancy)
 min_life_exp <- min(data_clean$Life_Expectancy)
 max_life_exp <- max(data_clean$Life_Expectancy)
 
-cat("--- LIFE EXPECTANCY (years) ---\n")
+cat("--- LIFE EXPECTANCY\n")
 cat("Mean:   ", round(mean_life_exp, 2), "\n")
 cat("SD:     ", round(sd_life_exp, 2), "\n")
 cat("Median: ", round(median_life_exp, 2), "\n")
@@ -128,41 +128,34 @@ cat("Max:    ", round(max_life_exp, 2), "\n\n")
 # 5. VISUALIZATIONS 
 # ============================================================================
 
-cat("=== CREATING VISUALIZATIONS FOR MERGED DATA ONLY ===\n\n")
+cat("=== CREATING VISUALIZATIONS \n\n")
 
-# Scatter plot with regression line
-scatter_plot <- ggplot(data_clean, aes(x = Alcohol_Consumption, y = Life_Expectancy)) +
+# Scatter plot with regression line 
+scatter_plot <- ggplot(data_clean, aes(x = Life_Expectancy, y = Alcohol_Consumption)) +
   geom_point(alpha = 0.6, size = 3, color = "darkblue") +
   geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) +
-  labs(title = "Alcohol Consumption vs Life Expectancy (Merged Dataset)",
-       x = "Alcohol Consumption per Capita (litres)",
-       y = "Life Expectancy at Birth (years)") +
+  labs(title = "Life Expectancy vs Alcohol Consumption",
+       x = "Life Expectancy",
+       y = "Alcohol Consumption") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 print(scatter_plot)
 
-# Histogram of Alcohol Consumption
+# Histogram for Alcohol Consumption 
 hist(data_clean$Alcohol_Consumption,
-     main = "Distribution of Alcohol Consumption (Merged Dataset)",
+     main = "Distribution of Alcohol Consumption",
      xlab = "Alcohol Consumption (litres per capita)",
-     ylab = "Frequency",
-     col = "steelblue",
+     ylab = "Density",
+     col = "lightblue",
      border = "white",
-     breaks = 15)
+     breaks = 15,
+     prob = TRUE,
+     xlim = c(0, 200))  # Extend axis to 200 litres
 
-cat("Displayed: Histogram of Alcohol Consumption (Merged Data)\n")
+# Add the density line
+lines(density(data_clean$Alcohol_Consumption), col = "blue", lwd = 2)
 
-# Histogram of Life Expectancy
-hist(data_clean$Life_Expectancy,
-     main = "Distribution of Life Expectancy (Merged Dataset)",
-     xlab = "Life Expectancy (years)",
-     ylab = "Frequency",
-     col = "coral",
-     border = "white",
-     breaks = 15)
-
-cat("Displayed: Histogram of Life Expectancy (Merged Data)\n")
 
 
 # Pearson correlation test
